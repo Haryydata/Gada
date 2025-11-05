@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products – Gada Electronics</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ---------- Brand gradient text ---------- */
+    .brand-gradient{
+      background: linear-gradient(90deg,#22c55e,#facc15,#6366f1);
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+      color:transparent;
+      display:inline-block;
+      font-weight:800;
+      text-shadow:0 1px 0 rgba(255,255,255,.35),0 2px 12px rgba(0,0,0,.08);
+    }
+
+    /* ================================
+       THEME VARIABLES
+       ================================ */
+    :root{
+      --bg:#0b1020;
+      --surface:#0f172a;
+      --elev:#111827e6;
+
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+
+      --brand-100:#e0e7ff;
+      --brand-200:#c7d2fe;
+      --brand:#6366f1;      /* indigo-500 */
+      --brand-600:#4f46e5;  /* indigo-600 */
+      --ring:#8b5cf6;       /* violet-500 */
+      --accent:#22c55e;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+
+      --gradient-hero: radial-gradient(1200px 800px at 10% -10%, #4f46e522 0%, transparent 50%),
+                       radial-gradient(1200px 800px at 90% 110%, #22c55e22 0%, transparent 50%),
+                       linear-gradient(135deg, #0f172a 0%, #0b1020 100%);
+      --gradient-card: linear-gradient(180deg,#0f172a 0%,#0b1020 100%);
+      --gradient-brand: linear-gradient(90deg,var(--brand-600),var(--ring));
+    }
+    html.light{
+      --bg:#f8fafc;        /* slate-50 */
+      --surface:#ffffff;
+      --elev:#ffffffea;
+
+      --text:#0f172a;      /* slate-900 */
+      --muted:#475569;     /* slate-600 */
+
+      --gradient-hero: radial-gradient(1200px 800px at 20% -10%, #6366f11a 0%, transparent 50%),
+                       radial-gradient(1000px 700px at 90% 110%, #22c55e1a 0%, transparent 50%),
+                       linear-gradient(135deg,#ffffff 0%,#eef2f7 100%);
+      --gradient-card: linear-gradient(180deg,#ffffff 0%,#f8fafc 100%);
+    }
+
+    /* Base */
+    body{
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100dvh;
+      position:relative;
+    }
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        radial-gradient(circle at 20% 10%, #6366f10f 0 25%, transparent 26%),
+        radial-gradient(circle at 80% 30%, #22c55e14 0 20%, transparent 21%),
+        radial-gradient(circle at 30% 80%, #8b5cf612 0 22%, transparent 23%);
+      pointer-events:none; z-index:0;
+    }
+    .container{ position:relative; z-index:1; }
+
+    .no-scrollbar::-webkit-scrollbar{ display:none; }
+    .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+
+    .card{
+      background:var(--gradient-card);
+      border:1px solid #ffffff12;
+      box-shadow:0 10px 30px #00000033, inset 0 1px 0 #ffffff0d;
+    }
+    .card-hover{ transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .card-hover:hover{ transform:translateY(-6px); box-shadow:0 18px 40px #0000004d; border-color:#ffffff26; }
+
+    .btn-primary{
+      background:var(--gradient-brand);
+      color:#fff; font-weight:700;
+      border-radius:.75rem; padding:.7rem 1rem;
+      box-shadow:0 8px 24px #4f46e53d;
+      transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .btn-primary:hover{ transform:translateY(-1px); filter:brightness(1.05); box-shadow:0 12px 28px #4f46e54d; }
+    .btn-outline{
+      border:1px solid #ffffff22; background:transparent; color:var(--text);
+      border-radius:.75rem; padding:.6rem .9rem; font-weight:600;
+      transition:border-color .2s ease, background-color .2s ease, color .2s ease;
+    }
+    .btn-outline:hover{ border-color:var(--brand-200); background:#ffffff08; }
+
+    .glass{
+      background:linear-gradient(180deg,#ffffff14,#ffffff06);
+      border:1px solid #ffffff22;
+      box-shadow:0 8px 30px #0000002a;
+      backdrop-filter:blur(10px);
+    }
+    .brand-logo{ filter:drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+
+    /* Header + nav */
+    header{ background:var(--elev); }
+    .category-link{ color:#ffffffb3; padding-bottom:.5rem; border-bottom:2px solid transparent; }
+    .category-link.active{ color:var(--brand-200); border-color:var(--brand); font-weight:700; }
+
+    /* Light-mode readability */
+    html.light header, html.light header *{ color:var(--text) !important; }
+    html.light .text-white\/70,
+    html.light .text-white\/60,
+    html.light .text-white\/75{ color:var(--muted) !important; }
+    html.light .btn-outline{ border-color:#e2e8f0; }
+    html.light .btn-outline:hover{ background:#f8fafc; border-color:#cbd5e1; }
+    html.light input{ color:var(--text); background:#f1f5f9; border-color:#e2e8f0; }
+
+    /* Product cards */
+    .prod-card{ background:#ffffff08; border:1px solid #ffffff12; }
+    html.light .prod-card{ background:#ffffff; border-color:#e5e7eb; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 border-b border-white/10 backdrop-blur supports-[backdrop-filter]:bg-[color:var(--elev)]">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <img src="gdlogo.png" alt="Gada Electronics Logo" class="h-9 w-9 object-contain brand-logo"/>
+          <a href="GadaIndex.html" class="text-lg md:text-xl font-extrabold tracking-tight">
+            <span class="brand-gradient">Gada Electronics</span>
+          </a>
+        </div>
+
+        <!-- Search (md+) -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-4">
+          <div class="relative w-full">
+            <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-white/50"></i>
+            <input type="text" placeholder="Search for products, brands and more"
+                   class="w-full rounded-xl bg-white/5 border border-white/10 py-2.5 pl-12 pr-4 text-sm placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]"/>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 md:gap-4">
+          <button id="theme-toggle" class="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm" aria-label="Toggle theme">
+            <i data-lucide="moon"></i><span class="hidden md:inline">Theme</span>
+          </button>
+          <div class="hidden md:flex gap-4 text-center">
+            <a href="#" class="flex flex-col items-center text-white/80 hover:text-white transition-colors">
+              <i data-lucide="user" class="size-6"></i><span class="text-xs">Login</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-white/80 hover:text-white transition-colors">
+              <i data-lucide="heart" class="size-6"></i><span class="text-xs">Wishlist</span>
+            </a>
+            <a href="#" class="relative flex flex-col items-center text-white/80 hover:text-white transition-colors">
+              <i data-lucide="shopping-cart" class="size-6"></i>
+              <span class="absolute -top-1 right-1 text-[10px] bg-[color:var(--danger)] text-white w-4 h-4 rounded-full flex items-center justify-center">3</span>
+              <span class="text-xs">Cart</span>
+            </a>
+          </div>
+          <button id="menu-btn-products" class="md:hidden focus:outline-none text-[color:var(--text)]" aria-label="Open menu">
+            <i data-lucide="menu" class="size-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Navigation -->
+    <nav id="category-links" class="border-t border-white/10">
+      <div class="container mx-auto px-4 overflow-x-auto no-scrollbar">
+        <div class="flex space-x-6 md:space-x-8 py-2 md:justify-center">
+          <a href="#" data-category="all" class="category-link active text-sm font-semibold whitespace-nowrap">All Products</a>
+          <a href="#" data-category="mobile" class="category-link text-sm font-medium whitespace-nowrap">Mobile & Tablets</a>
+          <a href="#" data-category="laptop" class="category-link text-sm font-medium whitespace-nowrap">Laptops</a>
+          <a href="#" data-category="tv" class="category-link text-sm font-medium whitespace-nowrap">TV</a>
+          <a href="#" data-category="kitchen" class="category-link text-sm font-medium whitespace-nowrap">Home & Kitchen</a>
+          <a href="#" data-category="gaming" class="category-link text-sm font-medium whitespace-nowrap">Gaming</a>
+          <a href="#" data-category="audio" class="category-link text-sm font-medium whitespace-nowrap">Audio & Video</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-menu" class="fixed inset-0 bg-black/60 z-50 hidden">
+    <div id="mobile-menu-content" class="fixed top-0 right-0 h-full w-full max-w-xs glass p-6 transform translate-x-full">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-bold">Menu</h2>
+        <button id="close-menu-btn" class="text-white" aria-label="Close menu"><i data-lucide="x" class="size-6"></i></button>
+      </div>
+      <div class="flex items-center justify-around text-center border-b border-white/10 pb-6">
+        <div><i data-lucide="user" class="size-8 mx-auto text-white/80"></i><p class="text-sm mt-1">Login</p></div>
+        <div><i data-lucide="heart" class="size-8 mx-auto text-white/80"></i><p class="text-sm mt-1">Wishlist</p></div>
+        <div class="relative">
+          <i data-lucide="shopping-cart" class="size-8 mx-auto text-white/80"></i>
+          <span class="absolute -top-1 -right-1 bg-[color:var(--danger)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</span>
+          <p class="text-sm mt-1">Cart</p>
+        </div>
+      </div>
+      <nav class="mt-6 space-y-3">
+        <a href="GadaIndex.html" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
+          <i data-lucide="home" class="size-5 text-white/80"></i><span>Home</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
+          <i data-lucide="layout-grid" class="size-5 text-white/80"></i><span>All Categories</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
+          <i data-lucide="zap" class="size-5 text-white/80"></i><span>Today's Deals</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container mx-auto px-4 py-8 md:py-10">
+    <!-- Filters row -->
+    <section class="mb-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <div class="flex-1 glass rounded-xl px-4 py-2 flex items-center gap-2">
+        <i data-lucide="search" class="size-5 text-white/60"></i>
+        <input id="quick-search" type="text" placeholder="Quick search in current category..."
+               class="w-full bg-transparent outline-none placeholder:text-white/50 text-sm"/>
+      </div>
+      <div class="glass rounded-xl px-3 py-2 flex items-center gap-2">
+        <i data-lucide="sliders-horizontal" class="size-5 text-white/60"></i>
+        <select id="sort-by" class="bg-transparent outline-none text-sm">
+          <option value="popular">Most Popular</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Top Rated</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Product Grid Section -->
+    <section id="product-section" class="space-y-10 md:space-y-12">
+      <!-- Brand groups will be inserted via JS -->
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10 bg-[color:var(--surface)] mt-12">
+    <div class="container mx-auto px-4 py-8">
+      <div class="md:flex md:justify-between gap-10">
+        <div class="mb-8 md:mb-0 max-w-md">
+          <div class="size-10 rounded-full bg-gradient-to-tr from-[color:var(--brand-600)] to-[color:var(--ring)] mb-4"></div>
+          <h3 class="text-xl font-bold">Gada Electronics</h3>
+          <p class="text-sm text-white/70 mt-2">Aapka vishvasniya saathi latest electronics aur gadgets ke liye.</p>
+          <div class="flex gap-4 mt-6">
+            <a href="#" class="text-white/70 hover:text-white transition-colors"><i data-lucide="facebook" class="size-6"></i></a>
+            <a href="#" class="text-white/70 hover:text-white transition-colors"><i data-lucide="instagram" class="size-6"></i></a>
+            <a href="#" class="text-white/70 hover:text-white transition-colors"><i data-lucide="youtube" class="size-6"></i></a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-8">
+          <div class="space-y-3 text-sm">
+            <h4 class="font-bold">Customer Service</h4>
+            <ul class="space-y-2 text-white/70">
+              <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Shipping Info</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Returns & Exchanges</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Warranty</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Track Your Order</a></li>
+            </ul>
+          </div>
+          <div class="space-y-3 text-sm">
+            <h4 class="font-bold">About</h4>
+            <ul class="space-y-2 text-white/70">
+              <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Press</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Investor Relations</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Sustainability</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+            </ul>
+          </div>
+          <div class="space-y-3 text-sm">
+            <h4 class="font-bold">Payment & Security</h4>
+            <ul class="space-y-2 text-white/70">
+              <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="text-center text-xs text-white/60 mt-8 pt-6 border-t border-white/10">&copy; 2025 Gada Electronics. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Icons
+    lucide.createIcons();
+
+    // Theme toggle (respect saved)
+    const toggle = document.getElementById('theme-toggle');
+    const root = document.documentElement;
+    const themeKey = 'gada-theme';
+    const saved = localStorage.getItem(themeKey);
+    if (saved === 'light') root.classList.add('light');
+    toggle?.addEventListener('click', () => {
+      root.classList.toggle('light');
+      localStorage.setItem(themeKey, root.classList.contains('light') ? 'light' : 'dark');
+    });
+
+    // Mobile drawer
+    const menuBtn = document.getElementById('menu-btn-products');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mobileMenuContent = document.getElementById('mobile-menu-content');
+
+    const openMenu = () => {
+      mobileMenu.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      setTimeout(() => { mobileMenuContent.classList.remove('translate-x-full'); }, 10);
+    };
+    const closeMenu = () => {
+      mobileMenuContent.classList.add('translate-x-full');
+      document.body.classList.remove('overflow-hidden');
+      setTimeout(() => { mobileMenu.classList.add('hidden'); }, 300);
+    };
+
+    menuBtn?.addEventListener('click', openMenu);
+    closeMenuBtn?.addEventListener('click', closeMenu);
+    mobileMenu?.addEventListener('click', (e) => { if (e.target === mobileMenu) closeMenu(); });
+
+    // ====== DATA GENERATION (unchanged logic; URLs curated) ======
+    const imageUrls = {
+      mobile: [
+        'https://images.unsplash.com/photo-1601784551446-20c9e07cdbf1?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1580910051074-3eb694886505?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1567581935884-3349723552ca?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1523206489230-c012c64b2b48?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1598327105666-65825ec19f71?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1620283085063-544a7f055335?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1610792516307-ea5acd9c3b00?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1546054454-aa26e2b73480?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1604671368394-22ae7d517fd2?q=80&w=400&h=400&fit=crop',
+      ],
+      laptop: [
+        'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1602080858428-57e16f92f544?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=400&h=400&fit=crop'
+      ],
+      tv: [
+        'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1601944177324-f23675a2f511?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1628175422830-a384a6b9815a?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?q=80&w=400&h=400&fit=crop'
+      ],
+      kitchen: [
+        'https://images.unsplash.com/photo-1605333140413-a35941e75a17?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1618221085730-8e11c68f1f5a?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1556911220-e15b29be8c9f?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1600122299498-5c4b4334f414?q=80&w=400&h=400&fit=crop'
+      ],
+      gaming: [
+        'https://images.unsplash.com/photo-1552820728-8b8314177b21?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1612036782180-6f0b6cd84627?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1598550463033-6881a8b9e63c?q=80&w=400&h=400&fit=crop'
+      ],
+      audio: [
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?q=80&w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1546435770-a3e426bf4022?q=80&w=400&h=400&fit=crop'
+      ],
+    };
+
+    function generateProducts(){
+      let products=[];
+      const brands={
+        mobile:['Samsung','Apple','OnePlus','Xiaomi','Realme','Vivo','Oppo','Motorola','Google'],
+        laptop:['Dell','HP','Lenovo','Apple','ASUS','MSI','Microsoft'],
+        tv:['Samsung','LG','Sony','OnePlus','Xiaomi','Hisense','TCL'],
+        kitchen:['Philips','Prestige','Bajaj','Havells','Kent','Aquaguard'],
+        gaming:['Sony','Microsoft','Nintendo','Logitech','Corsair','Razer'],
+        audio:['Sony','Bose','JBL','Sennheiser','Anker','Boat']
+      };
+      const series={
+        Samsung:['Galaxy S','Galaxy A','Galaxy M','Galaxy F','Galaxy Z'],
+        Xiaomi:['Mi','Redmi Note','Redmi'],
+        Realme:['GT Series','Narzo','C Series'],
+        Dell:['XPS','Inspiron','Alienware'],
+        HP:['Spectre','Envy','Pavilion','Omen'],
+        Lenovo:['ThinkPad','Yoga','IdeaPad','Legion'],
+      };
+
+      let id=1; let imageCounters={};
+      for(const category in brands){
+        imageCounters[category]=0;
+        for(const brand of brands[category]){
+          const numProducts = Math.floor(Math.random()*6)+6; // 6–11 each
+          for(let i=0;i<numProducts;i++){
+            let productName=`${brand} `;
+            if(series[brand]){ productName += `${series[brand][Math.floor(Math.random()*series[brand].length)]} `; }
+            productName += `${category.charAt(0).toUpperCase()}${Math.floor(Math.random()*90)+10}`;
+            if(category==='mobile' || category==='laptop') productName += ` (${Math.pow(2,Math.floor(Math.random()*4)+6)}GB)`;
+
+            const imgs=imageUrls[category];
+            const imageIndex=imageCounters[category]%imgs.length;
+            const img=imgs[imageIndex];
+            imageCounters[category]++;
+
+            products.push({
+              id:id++,
+              name:productName,
+              brand,
+              category,
+              price:`₹${(Math.floor(Math.random()*1800)+200)*100-1}`,
+              rating:(Math.random()*0.8+4.1).toFixed(1),
+              reviews:`${(Math.random()*20).toFixed(1)}k`,
+              image:img
+            });
+          }
+        }
+      }
+      return products;
+    }
+
+    const products = generateProducts();
+    const productSection = document.getElementById('product-section');
+    const categoryLinksContainer = document.getElementById('category-links');
+    const quickSearch = document.getElementById('quick-search');
+    const sortBy = document.getElementById('sort-by');
+
+    function capitalize(s){ return s ? s[0].toUpperCase()+s.slice(1) : ''; }
+
+    function renderProducts(category='all'){
+      productSection.innerHTML='';
+      let list = category==='all' ? [...products] : products.filter(p=>p.category===category);
+
+      // quick search
+      const q = (quickSearch?.value || '').trim().toLowerCase();
+      if(q){ list = list.filter(p => `${p.name} ${p.brand}`.toLowerCase().includes(q)); }
+
+      // sort
+      const sortVal = sortBy?.value || 'popular';
+      if(sortVal==='price-asc'){ list.sort((a,b)=> +a.price.replace(/[₹,]/g,'') - +b.price.replace(/[₹,]/g,'')); }
+      if(sortVal==='price-desc'){ list.sort((a,b)=> +b.price.replace(/[₹,]/g,'') - +a.price.replace(/[₹,]/g,'')); }
+      if(sortVal==='rating'){ list.sort((a,b)=> +b.rating - +a.rating ); }
+
+      if(list.length===0){
+        productSection.innerHTML = `<p class="text-center text-white/70">Is category mein koi product nahi mila.</p>`;
+        lucide.createIcons(); return;
+      }
+
+      // group by brand
+      const grouped = list.reduce((acc,p)=>{ (acc[p.brand] ||= []).push(p); return acc; },{});
+      for(const brand in grouped){
+        const items = grouped[brand];
+
+        const cards = items.map(p=>`
+          <div class="prod-card rounded-2xl p-4 shadow-sm border flex flex-col card-hover flex-shrink-0 w-64">
+            <div class="relative">
+              <img src="${p.image}" alt="${p.name}" class="w-full rounded-xl aspect-square object-cover bg-slate-100">
+            </div>
+            <div class="mt-4 flex-grow flex flex-col">
+              <h4 class="font-bold text-sm flex-grow">${p.name}</h4>
+              <div class="flex items-center text-xs text-white/70 mt-2">
+                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                <span class="ml-1 font-semibold">${p.rating}</span>
+                <span>(${p.reviews})</span>
+              </div>
+              <div class="flex items-baseline gap-2 mt-2">
+                <p class="text-xl font-bold">${p.price}</p>
+              </div>
+              <button class="btn-primary mt-4">Add to Cart</button>
+            </div>
+          </div>
+        `).join('');
+
+        const groupEl = document.createElement('section');
+        groupEl.className = 'space-y-3';
+        const categoryName = category==='all' ? 'Products' : `${capitalize(category)}s`;
+        groupEl.innerHTML = `
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl md:text-2xl font-bold">${brand} ${categoryName}</h3>
+            <a href="#" class="btn-outline text-sm">View All</a>
+          </div>
+          <div class="flex gap-6 overflow-x-auto pb-4 -mx-4 px-4 no-scrollbar">${cards}</div>
+        `;
+        productSection.appendChild(groupEl);
+      }
+
+      lucide.createIcons();
+    }
+
+    // Category link handler
+    categoryLinksContainer.addEventListener('click',(e)=>{
+      e.preventDefault();
+      const link = e.target.closest('.category-link');
+      if(!link) return;
+      document.querySelectorAll('.category-link').forEach(l=>l.classList.remove('active'));
+      link.classList.add('active');
+      const cat = link.dataset.category;
+      renderProducts(cat);
+    });
+
+    // Search + sort handlers
+    quickSearch?.addEventListener('input', ()=>{
+      const active = document.querySelector('.category-link.active')?.dataset.category || 'all';
+      renderProducts(active);
+    });
+    sortBy?.addEventListener('change', ()=>{
+      const active = document.querySelector('.category-link.active')?.dataset.category || 'all';
+      renderProducts(active);
+    });
+
+    // Load category from URL
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const urlParams = new URLSearchParams(window.location.search);
+      const cat = urlParams.get('category');
+      if(cat){
+        document.querySelectorAll('.category-link').forEach(l=>l.classList.remove('active'));
+        document.querySelector(`.category-link[data-category="${cat}"]`)?.classList.add('active');
+        renderProducts(cat);
+      }else{
+        renderProducts('all');
+      }
+    });
+  </script>
+</body>
+</html>
