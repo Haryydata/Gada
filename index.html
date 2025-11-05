@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gada Electronics – Super Design</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ---------- Brand gradient text (works in all browsers) ---------- */
+    .brand-gradient{
+      background: linear-gradient(90deg, #22c55e, #facc15, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      display: inline-block;
+      font-weight: 800;
+      text-shadow: 0 1px 0 rgba(255,255,255,.35), 0 2px 12px rgba(0,0,0,.08);
+    }
+
+    /* ================================
+       THEME (uses CSS variables)
+       ================================ */
+    :root {
+      --bg: #0b1020;
+      --surface: #0f172a;
+      --elev: #111827e6;
+
+      --text: #e5e7eb;   /* dark mode body text */
+      --muted: #94a3b8;  /* dark mode secondary */
+
+      --brand-50: #eef2ff;
+      --brand-100: #e0e7ff;
+      --brand-200: #c7d2fe;
+      --brand-400: #818cf8;
+      --brand: #6366f1;
+      --brand-600: #4f46e5;
+      --brand-700: #4338ca;
+
+      --accent: #22c55e;
+      --accent-600: #16a34a;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --ring: #8b5cf6;
+
+      --gradient-hero: radial-gradient(1200px 800px at 10% -10%, #4f46e522 0%, transparent 50%),
+                       radial-gradient(1200px 800px at 90% 110%, #22c55e22 0%, transparent 50%),
+                       linear-gradient(135deg, #0f172a 0%, #0b1020 100%);
+      --gradient-card: linear-gradient(180deg, #0f172a 0%, #0b1020 100%);
+      --gradient-brand: linear-gradient(90deg, var(--brand-600), var(--ring));
+    }
+
+    /* Light mode variables + a few targeted overrides for contrast */
+    html.light {
+      --bg: #f8fafc;        /* slate-50 */
+      --surface: #ffffff;
+      --elev: #ffffffea;
+
+      --text: #0f172a;      /* slate-900 */
+      --muted: #475569;     /* slate-600 */
+
+      --gradient-hero: radial-gradient(1200px 800px at 20% -10%, #6366f11a 0%, transparent 50%),
+                       radial-gradient(1000px 700px at 90% 110%, #22c55e1a 0%, transparent 50%),
+                       linear-gradient(135deg, #ffffff 0%, #eef2f7 100%);
+      --gradient-card: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    /* Page base */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      background: var(--bg);
+      color: var(--text);   /* theme-aware */
+      min-height: 100dvh;
+      position: relative;
+    }
+
+    /* Subtle background glow */
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(circle at 20% 10%, #6366f10f 0 25%, transparent 26%),
+        radial-gradient(circle at 80% 30%, #22c55e14 0 20%, transparent 21%),
+        radial-gradient(circle at 30% 80%, #8b5cf612 0 22%, transparent 23%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { position: relative; z-index: 1; }
+
+    /* Utilities */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .card {
+      background: var(--gradient-card);
+      border: 1px solid #ffffff12;
+      box-shadow: 0 10px 30px #00000033, inset 0 1px 0 #ffffff0d;
+    }
+    .card-hover { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 18px 40px #0000004d; border-color: #ffffff26; }
+
+    .btn-primary {
+      background: var(--gradient-brand);
+      color: white; font-weight: 700;
+      border-radius: 0.75rem;
+      padding: .75rem 1.25rem;
+      box-shadow: 0 8px 24px #4f46e53d;
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.05); box-shadow: 0 12px 28px #4f46e54d; }
+
+    .btn-outline {
+      border: 1px solid #ffffff22;
+      background: transparent;
+      color: var(--text);
+      border-radius: 0.75rem; padding: .65rem 1rem; font-weight: 600;
+      transition: border-color .2s ease, background-color .2s ease, color .2s ease;
+    }
+    .btn-outline:hover { border-color: var(--brand-400); background: #ffffff08; }
+
+    .chip { font-size: .725rem; font-weight: 700; letter-spacing: .02em; padding: .35rem .6rem; border-radius: 999px; }
+    .chip-brand { background: #6366f120; color: #c7d2fe; border: 1px solid #6366f140; }
+    .chip-hot { background: #ef444420; color: #fecaca; border: 1px solid #ef444440; }
+    .chip-new { background: #22c55e20; color: #bbf7d0; border: 1px solid #22c55e40; }
+
+    .glass {
+      background: linear-gradient(180deg, #ffffff14, #ffffff06);
+      border: 1px solid #ffffff22;
+      box-shadow: 0 8px 30px #0000002a;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Hero */
+    .hero {
+      background: var(--gradient-hero);
+      border: 1px solid #ffffff14;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 280 280"><g fill="none" stroke="%23ffffff0f" stroke-width="1"><path d="M0 140h280M140 0v280"/><circle cx="140" cy="140" r="139"/></g></svg>');
+      background-size: 560px 560px; background-repeat: no-repeat; background-position: center;
+      pointer-events: none; opacity: .35;
+    }
+
+    /* Drawer animation */
+    #mobile-menu-content { transition: transform .3s ease-in-out; }
+    #mobile-menu.hidden #mobile-menu-content { transform: translateX(100%); }
+
+    /* Icon dot + logo shadow */
+    .dot { width: .5rem; height: .5rem; border-radius: 999px; background: var(--brand-400); display: inline-block; }
+    .brand-logo{ filter: drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
+
+    /* ---------- Light mode readability overrides ---------- */
+    html.light header { background: var(--surface); }
+    html.light header a,
+    html.light header .text-white\/80,
+    html.light header .text-white\/70,
+    html.light header .text-white\/60,
+    html.light header i { color: var(--text) !important; }
+
+    html.light .placeholder\:text-white\/50::placeholder { color: #94a3b8 !important; }
+    html.light input { color: var(--text); background: #f1f5f9; border-color: #e2e8f0; }
+
+    /* Generic: convert white/xx utility texts to muted in light mode */
+    html.light .text-white\/70,
+    html.light .text-white\/75,
+    html.light .text-white\/60,
+    html.light .text-white\/80 { color: var(--muted) !important; }
+
+    html.light .btn-outline { border-color: #e2e8f0; }
+    html.light .btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
+
+    html.light .hero p { color: var(--muted) !important; }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-[color:var(--elev)] backdrop-blur supports-[backdrop-filter]:bg-[color:var(--elev)]">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex items-center justify-between gap-4">
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <img id="site-logo" src="gdlogo.png" alt="Gada Electronics Logo" class="h-9 w-9 object-contain brand-logo" />
+          <a href="#" class="text-lg md:text-xl font-extrabold tracking-tight">
+            <span class="brand-gradient">Gada Electronics</span>
+          </a>
+        </div>
+
+        <!-- Search (md+) -->
+        <div class="hidden md:flex flex-1 max-w-xl mx-4">
+          <div class="relative w-full">
+            <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-white/50"></i>
+            <input type="text" placeholder="Search for products, brands and more" class="w-full rounded-xl bg-white/5 border border-white/10 py-2.5 pl-12 pr-4 text-sm placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]" />
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-2 md:gap-4">
+         <button id="theme-toggle"
+        class="btn-outline inline-flex items-center gap-2 px-3 py-2 text-sm"
+        aria-label="Toggle theme">
+  <i data-lucide="moon"></i>
+  <span class="hidden md:inline">Theme</span> <!-- XS/SM per sirf icon -->
+</button>
+
+          <div class="hidden md:flex gap-4 text-center">
+            <a href="#" class="flex flex-col items-center text-white/80 hover:text-white transition-colors"><i data-lucide="user" class="size-6"></i><span class="text-xs">Login</span></a>
+            <a href="#" class="flex flex-col items-center text-white/80 hover:text-white transition-colors"><i data-lucide="heart" class="size-6"></i><span class="text-xs">Wishlist</span></a>
+            <a href="#" class="relative flex flex-col items-center text-white/80 hover:text-white transition-colors">
+              <i data-lucide="shopping-cart" class="size-6"></i>
+              <span class="absolute -top-1 right-1 text-[10px] bg-[color:var(--danger)] text-white w-4 h-4 rounded-full flex items-center justify-center">3</span>
+              <span class="text-xs">Cart</span>
+            </a>
+          </div>
+          <button id="menu-btn" class="md:hidden focus:outline-none text-[color:var(--text)]" aria-label="Open menu">
+  <i data-lucide="menu" class="size-6"></i>
+</button>
+
+        </div>
+      </div>
+
+      <!-- Mobile search -->
+      <div class="mt-3 relative md:hidden">
+        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-white/50"></i>
+        <input type="text" placeholder="Search for products..." class="w-full rounded-xl bg-white/5 border border-white/10 py-2 pl-10 pr-4 text-sm placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-[color:var(--brand)]" />
+      </div>
+    </div>
+
+    <!-- Category nav -->
+    <nav class="border-t border-white/10">
+      <div class="container mx-auto px-4 overflow-x-auto no-scrollbar">
+        <div class="flex space-x-6 md:space-x-8 py-2 md:justify-center">
+          <!-- Electronics → all -->
+<a href="Product.html?category=all" class="text-sm font-semibold ...">Electronics</a>
+
+<!-- Mobile & Tablets → mobile -->
+<a href="Product.html?category=mobile" class="text-sm font-medium ...">Mobile & Tablets</a>
+
+<!-- Computers → laptop -->
+<a href="Product.html?category=laptop" class="text-sm font-medium ...">Computers</a>
+
+<!-- Home & Kitchen → kitchen -->
+<a href="Product.html?category=kitchen" class="text-sm font-medium ...">Home & Kitchen</a>
+
+<!-- Fashion → all (abhi Product categories me nahi hai) -->
+<a href="Product.html?category=all" class="text-sm font-medium ...">Fashion</a>
+
+<!-- Gaming → gaming -->
+<a href="Product.html?category=gaming" class="text-sm font-medium ...">Gaming</a>
+
+<!-- Audio & Video → audio -->
+<a href="Product.html?category=audio" class="text-sm font-medium ...">Audio & Video</a>
+
+<!-- Smart Home → tv (closest match) -->
+<a href="Product.html?category=tv" class="text-sm font-medium ...">Smart Home</a>
+
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-menu" class="fixed inset-0 bg-black/60 z-50 hidden">
+    <div id="mobile-menu-content" class="fixed top-0 right-0 h-full w-full max-w-xs glass p-6 transform translate-x-full">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-bold">Menu</h2>
+        <button id="close-menu-btn" class="text-white"><i data-lucide="x" class="size-6"></i></button>
+      </div>
+      <div class="flex items-center justify-around text-center border-b border-white/10 pb-6">
+        <div><i data-lucide="user" class="size-8 mx-auto text-white/80"></i><p class="text-sm mt-1">Login</p></div>
+        <div><i data-lucide="heart" class="size-8 mx-auto text-white/80"></i><p class="text-sm mt-1">Wishlist</p></div>
+        <div class="relative">
+          <i data-lucide="shopping-cart" class="size-8 mx-auto text-white/80"></i>
+          <span class="absolute -top-1 -right-1 bg-[color:var(--danger)] text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</span>
+          <p class="text-sm mt-1">Cart</p>
+        </div>
+      </div>
+      <nav class="mt-6 space-y-3">
+        <a href="#" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors"><i data-lucide="layout-grid" class="size-5 text-white/80"></i><span>All Categories</span></a>
+        <a href="#" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors"><i data-lucide="zap" class="size-5 text-white/80"></i><span>Today's Deals</span></a>
+        <a href="#" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors"><i data-lucide="package" class="size-5 text-white/80"></i><span>My Orders</span></a>
+        <a href="#" class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors"><i data-lucide="settings" class="size-5 text-white/80"></i><span>Settings</span></a>
+      </nav>
+    </div>
+  </div>
+
+  <main>
+    <div class="container mx-auto px-4 py-8 md:py-12 space-y-10 md:space-y-14">
+      <!-- HERO -->
+      <section class="hero rounded-2xl p-8 md:p-14 text-center">
+        <img src="gdlogo.png" alt="Gada Electronics Logo" class="mx-auto mb-4 h-14 md:h-16 object-contain brand-logo" />
+        <div class="inline-flex items-center gap-2 glass px-3 py-1 rounded-full text-xs font-semibold mb-4">
+          <span class="dot"></span>
+          Trusted by 50k+ shoppers
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
+          Welcome to <span class="brand-gradient">Gada Electronics</span>
+        </h1>
+        <p class="mt-3 md:text-lg text-white/75 max-w-2xl mx-auto">
+          Your one-stop shop for everything tech. Premium brands, smooth checkout, and fast delivery.
+        </p>
+        <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="Product.html?category=all" class="btn-primary">Start Shopping</a>
+<a href="Product.html?category=all" class="btn-outline inline-flex items-center gap-2">
+  <i data-lucide="sparkles" class="size-4"></i>View Deals
+</a>
+
+        </div>
+      </section>
+
+      <!-- PERSONALIZED ROW -->
+      <section class="card rounded-2xl p-5 md:p-6 card-hover">
+        <h3 class="text-base md:text-lg font-bold">Still looking for these?</h3>
+        <div class="mt-4 flex space-x-4 overflow-x-auto no-scrollbar -mb-5 -mr-5 pl-1 pb-5 pr-5">
+          <!-- items -->
+          <div class="flex-shrink-0 w-36 text-center group">
+            <div class="rounded-xl h-28 overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              <img src="https://images.unsplash.com/photo-1587061949409-02df41d545dc?q=80&w=200&h=200&fit=crop" alt="Laptop Bag" class="h-full w-full object-cover" />
+            </div>
+            <h4 class="font-semibold text-sm mt-2">Laptop Bags</h4>
+            <a href="Product.html?category=laptop" class="text-xs font-semibold text-[color:var(--brand-200)]">View Store</a>
+          </div>
+          <div class="flex-shrink-0 w-36 text-center group">
+            <div class="rounded-xl h-28 overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=200&h=200&fit=crop" alt="Laptop Accessories" class="h-full w-full object-cover" />
+            </div>
+            <h4 class="font-semibold text-sm mt-2">Laptop Accessories</h4>
+          <a href="Product.html?category=laptop" class="text-xs font-semibold text-[color:var(--brand-200)]">View Store</a>
+          </div>
+          <div class="flex-shrink-0 w-36 text-center group">
+            <div class="rounded-xl h-28 overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              <img src="https://images.unsplash.com/photo-1601784551446-20c9e07cdbf1?q=80&w=200&h=200&fit=crop" alt="Mobiles" class="h-full w-full object-cover" />
+            </div>
+            <h4 class="font-semibold text-sm mt-2">Mobiles</h4>
+           <a href="Product.html?category=mobile" class="text-xs font-semibold text-[color:var(--brand-200)]">View Store</a>
+
+          </div>
+          <div class="flex-shrink-0 w-36 text-center group">
+            <div class="rounded-xl h-28 overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              <img src="https://images.unsplash.com/photo-1546435770-a3e426bf4022?q=80&w=200&h=200&fit=crop" alt="Headphones" class="h-full w-full object-cover" />
+            </div>
+            <h4 class="font-semibold text-sm mt-2">Headphones</h4>
+            <a href="Product.html?category=audio" class="text-xs font-semibold text-[color:var(--brand-200)]">View Store</a>
+          </div>
+          <div class="flex-shrink-0 w-36 text-center group">
+            <div class="rounded-xl h-28 overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=200&h=200&fit=crop" alt="Smartwatches" class="h-full w-full object-cover" />
+            </div>
+            <h4 class="font-semibold text-sm mt-2">Smartwatches</h4>
+            <a href="Product.html?category=all" class="text-xs font-semibold text-[color:var(--brand-200)]">View Store</a>
+          </div>
+          <div class="flex-shrink-0 w-36 text-center group">
+            <div class="rounded-xl h-28 overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              <img src="https://images.unsplash.com/photo-1629429408209-1f912961dbd8?q=80&w=200&h=200&fit=crop" alt="Gaming Mouse" class="h-full w-full object-cover" />
+            </div>
+            <h4 class="font-semibold text-sm mt-2">Gaming Mouse</h4>
+            <a href="Product.html?category=gaming" class="text-xs font-semibold text-[color:var(--brand-200)]">View Store</a>
+          </div>
+          <div class="flex-shrink-0 w-36 text-center group">
+            <div class="rounded-xl h-28 overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+              <img src="https://images.unsplash.com/photo-1601741584391-4a46036b04e6?q=80&w=200&h=200&fit=crop" alt="Keyboard" class="h-full w-full object-cover" />
+            </div>
+            <h4 class="font-semibold text-sm mt-2">Keyboards</h4>
+            <a href="Product.html?category=leptop" class="text-xs font-semibold text-[color:var(--brand-200)]">View Store</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- CATEGORIES -->
+      <section>
+        <h3 class="text-2xl md:text-3xl font-bold text-center">Shop by Category</h3>
+        <p class="text-center text-white/70 mt-1">Find what you're looking for</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          <a href="Product.html?category=mobile" class="card rounded-2xl p-4 card-hover block">
+            <i data-lucide="smartphone" class="size-8"></i>
+            <h4 class="font-bold mt-4">Smartphones</h4>
+            <p class="text-xs text-white/60">Latest models</p>
+            <span class="inline-flex items-center gap-1 text-sm font-semibold mt-2 text-[color:var(--brand-200)]">Explore<i data-lucide="arrow-right" class="size-4"></i></span>
+          </a>
+          <a href="Product.html?category=leptop" class="card rounded-2xl p-4 card-hover block">
+            <i data-lucide="laptop" class="size-8"></i>
+            <h4 class="font-bold mt-4">Laptops</h4>
+            <p class="text-xs text-white/60">Gaming & Work</p>
+            <span class="inline-flex items-center gap-1 text-sm font-semibold mt-2 text-[color:var(--brand-200)]">Explore<i data-lucide="arrow-right" class="size-4"></i></span>
+          </a>
+          <a href="Product.html?category=gaming" class="card rounded-2xl p-4 card-hover block">
+            <i data-lucide="gamepad-2" class="size-8"></i>
+            <h4 class="font-bold mt-4">Gaming</h4>
+            <p class="text-xs text-white/60">Consoles & More</p>
+            <span class="inline-flex items-center gap-1 text-sm font-semibold mt-2 text-[color:var(--brand-200)]">Explore<i data-lucide="arrow-right" class="size-4"></i></span>
+          </a>
+          <a href="Product.html?category=audio" class="card rounded-2xl p-4 card-hover block">
+            <i data-lucide="headphones" class="size-8"></i>
+            <h4 class="font-bold mt-4">Audio</h4>
+            <p class="text-xs text-white/60">Premium Sound</p>
+            <span class="inline-flex items-center gap-1 text-sm font-semibold mt-2 text-[color:var(--brand-200)]">Explore<i data-lucide="arrow-right" class="size-4"></i></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- FLASH SALE -->
+      <section class="rounded-2xl p-6 md:p-8 text-center card">
+        <span class="chip chip-hot">Limited Time Offer</span>
+        <h3 class="text-3xl font-extrabold mt-3">Flash Sale</h3>
+        <p class="text-white/70 mt-1 max-w-md mx-auto">Unbeatable prices on premium electronics – Don't miss out!</p>
+        <div class="grid grid-cols-3 gap-4 text-center mt-6 max-w-sm mx-auto">
+          <div><div class="text-4xl font-bold animate-pulse">12</div><div class="text-xs text-white/60">HOURS</div></div>
+          <div><div class="text-4xl font-bold animate-pulse">34</div><div class="text-xs text-white/60">MINUTES</div></div>
+          <div><div class="text-4xl font-bold animate-pulse">56</div><div class="text-xs text-white/60">SECONDS</div></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8">
+          <!-- product cards -->
+          <div class="rounded-2xl p-4 border border-white/10 bg-white/5 backdrop-blur card-hover flex flex-col">
+            <div class="relative">
+              <span class="chip chip-hot absolute top-2 left-2">40% OFF</span>
+              <img src="https://images.pexels.com/photos/16573351/pexels-photo-16573351/free-photo-of-iphone-14-pro-in-hand.jpeg?auto=compress&cs=tinysrgb&w=400" alt="iPhone 14 Pro Max" class="w-full rounded-xl aspect-video object-cover" />
+            </div>
+            <div class="mt-4 flex-grow text-left">
+              <h4 class="font-bold">iPhone 14 Pro Max</h4>
+              <div class="flex items-center text-sm text-white/70 mt-1"><i data-lucide="star" class="size-4 text-yellow-400 fill-current"></i><span class="ml-1 font-semibold">4.5</span><span>(2.3k)</span></div>
+              <div class="flex items-baseline gap-2 mt-2"><p class="text-2xl font-bold">$719</p><p class="text-sm line-through text-white/50">$1199</p></div>
+              <p class="text-sm font-semibold text-[color:var(--accent)]">Save $480</p>
+            </div>
+            <button class="btn-primary mt-4">Add to Cart</button>
+          </div>
+
+          <div class="rounded-2xl p-4 border border-white/10 bg-white/5 backdrop-blur card-hover flex flex-col">
+            <div class="relative">
+              <span class="chip chip-hot absolute top-2 left-2">35% OFF</span>
+              <img src="https://images.pexels.com/photos/303383/pexels-photo-303383.jpeg?auto=compress&cs=tinysrgb&w=400" alt="MacBook Air M2" class="w-full rounded-xl aspect-video object-cover" />
+            </div>
+            <div class="mt-4 flex-grow text-left">
+              <h4 class="font-bold">MacBook Air M2</h4>
+              <div class="flex items-center text-sm text-white/70 mt-1"><i data-lucide="star" class="size-4 text-yellow-400 fill-current"></i><span class="ml-1 font-semibold">4.8</span><span>(1.2k)</span></div>
+              <div class="flex items-baseline gap-2 mt-2"><p class="text-2xl font-bold">$849</p><p class="text-sm line-through text-white/50">$1299</p></div>
+            </div>
+            <button class="btn-primary mt-4">Add to Cart</button>
+          </div>
+
+          <div class="rounded-2xl p-4 border border-white/10 bg-white/5 backdrop-blur card-hover flex flex-col">
+            <div class="relative">
+              <span class="chip chip-hot absolute top-2 left-2">28% OFF</span>
+              <img src="https://images.pexels.com/photos/3825517/pexels-photo-3825517.jpeg?auto=compress&cs=tinysrgb&w=400" alt="AirPods Pro" class="w-full rounded-xl aspect-video object-cover" />
+            </div>
+            <div class="mt-4 flex-grow text-left">
+              <h4 class="font-bold">AirPods Pro 2nd Gen</h4>
+              <div class="flex items-center text-sm text-white/70 mt-1"><i data-lucide="star" class="size-4 text-yellow-400 fill-current"></i><span class="ml-1 font-semibold">4.6</span><span>(4.1k)</span></div>
+              <div class="flex items-baseline gap-2 mt-2"><p class="text-2xl font-bold">$179</p><p class="text-sm line-through text-white/50">$249</p></div>
+            </div>
+            <button class="btn-primary mt-4">Add to Cart</button>
+          </div>
+
+          <div class="rounded-2xl p-4 border border-white/10 bg-white/5 backdrop-blur card-hover flex flex-col">
+            <div class="relative">
+              <span class="chip chip-new absolute top-2 left-2">18% OFF</span>
+              <img src="https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Apple Watch" class="w-full rounded-xl aspect-video object-cover" />
+            </div>
+            <div class="mt-4 flex-grow text-left">
+              <h4 class="font-bold">Apple Watch Series 8</h4>
+              <div class="flex items-center text-sm text-white/70 mt-1"><i data-lucide="star" class="size-4 text-yellow-400 fill-current"></i><span class="ml-1 font-semibold">4.4</span><span>(3.7k)</span></div>
+              <div class="flex items-baseline gap-2 mt-2"><p class="text-2xl font-bold">$329</p><p class="text-sm line-through text-white/50">$399</p></div>
+            </div>
+            <button class="btn-primary mt-4">Add to Cart</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURED PRODUCTS -->
+      <section>
+        <div class="text-center">
+          <span class="chip chip-brand">Bestsellers</span>
+          <h3 class="text-2xl md:text-3xl font-bold mt-3">Featured Products</h3>
+          <p class="text-white/70 mt-1 max-w-xl mx-auto">Hand-picked premium electronics that our customers love most</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8">
+          <div class="card rounded-2xl p-4 card-hover">
+            <div class="relative">
+              <span class="chip chip-new absolute top-2 left-2">Bestseller</span>
+              <button class="absolute top-2 right-2 glass p-2 rounded-full text-white/90 hover:text-[color:var(--danger)]"><i data-lucide="heart" class="size-5"></i></button>
+              <img src="https://placehold.co/300x200/0b1020/94a3b8?text=S23" alt="Samsung Galaxy S23" class="w-full rounded-xl" />
+            </div>
+            <div class="mt-4">
+              <h4 class="font-bold">Samsung Galaxy S23 Ultra</h4>
+              <div class="flex items-center text-sm text-white/70 mt-1"><i data-lucide="star" class="size-4 text-yellow-400 fill-current"></i><span class="ml-1 font-semibold">4.7</span><span>(1.2k)</span></div>
+              <div class="flex justify-between items-center mt-2"><p class="text-xl font-bold">$1,199</p><span class="text-sm font-semibold text-[color:var(--accent)]">In Stock</span></div>
+            </div>
+            <button class="btn-primary w-full mt-4">Add to Cart</button>
+          </div>
+
+          <div class="card rounded-2xl p-4 card-hover">
+            <div class="relative">
+              <span class="chip chip-hot absolute top-2 left-2">Hot Deal</span>
+              <button class="absolute top-2 right-2 glass p-2 rounded-full text-white/90 hover:text-[color:var(--danger)]"><i data-lucide="heart" class="size-5"></i></button>
+              <img src="https://placehold.co/300x200/0b1020/94a3b8?text=ROG" alt="ASUS ROG Strix" class="w-full rounded-xl" />
+            </div>
+            <div class="mt-4">
+              <h4 class="font-bold">ASUS ROG Strix G15</h4>
+              <div class="flex items-center text-sm text-white/70 mt-1"><i data-lucide="star" class="size-4 text-yellow-400 fill-current"></i><span class="ml-1 font-semibold">4.9</span><span>(856)</span></div>
+              <div class="flex justify-between items-center mt-2"><p class="text-xl font-bold">$1,599</p><span class="text-sm font-semibold text-[color:var(--warning)]">Limited</span></div>
+            </div>
+            <button class="btn-primary w-full mt-4">Add to Cart</button>
+          </div>
+
+          <div class="card rounded-2xl p-4 card-hover">
+            <div class="relative">
+              <span class="chip chip-brand absolute top-2 left-2">Pro Choice</span>
+              <button class="absolute top-2 right-2 glass p-2 rounded-full text-white/90 hover:text-[color:var(--danger)]"><i data-lucide="heart" class="size-5"></i></button>
+              <img src="https://placehold.co/300x200/0b1020/94a3b8?text=Canon" alt="Canon EOS R5" class="w-full rounded-xl" />
+            </div>
+            <div class="mt-4">
+              <h4 class="font-bold">Canon EOS R5 Mirrorless</h4>
+              <div class="flex items-center text-sm text-white/70 mt-1"><i data-lucide="star" class="size-4 text-yellow-400 fill-current"></i><span class="ml-1 font-semibold">4.8</span><span>(643)</span></div>
+              <div class="flex justify-between items-center mt-2"><p class="text-xl font-bold">$3,899</p><span class="text-sm font-semibold text-[color:var(--accent)]">Available</span></div>
+            </div>
+            <button class="btn-primary w-full mt-4">Add to Cart</button>
+          </div>
+
+          <div class="card rounded-2xl p-4 card-hover">
+            <div class="relative">
+              <span class="chip chip-new absolute top-2 left-2">New Arrival</span>
+              <button class="absolute top-2 right-2 glass p-2 rounded-full text-white/90 hover:text-[color:var(--danger)]"><i data-lucide="heart" class="size-5"></i></button>
+              <img src="https://placehold.co/300x200/0b1020/94a3b8?text=PS5" alt="PlayStation 5" class="w-full rounded-xl" />
+            </div>
+            <div class="mt-4">
+              <h4 class="font-bold">PlayStation 5 Console</h4>
+              <div class="flex items-center text-sm text-white/70 mt-1"><i data-lucide="star" class="size-4 text-yellow-400 fill-current"></i><span class="ml-1 font-semibold">4.6</span><span>(2.1k)</span></div>
+              <div class="flex justify-between items-center mt-2"><p class="text-xl font-bold">$499</p><span class="text-sm font-semibold text-[color:var(--danger)]">Low Stock</span></div>
+            </div>
+            <button class="btn-primary w-full mt-4">Add to Cart</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- BRANDS -->
+      <section class="card rounded-2xl p-6">
+        <div class="text-center">
+          <span class="chip chip-brand">Trusted Partners</span>
+          <h3 class="text-2xl md:text-3xl font-bold mt-3">Premium Brands</h3>
+          <p class="text-white/70 mt-1 max-w-xl mx-auto">We partner with the world's leading technology brands to bring you authentic, high-quality products</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mt-8">
+          <div class="rounded-xl p-4 text-center card-hover border border-white/10 bg-white/5">
+            <i data-lucide="apple" class="size-10 mx-auto"></i>
+            <h4 class="font-bold mt-2">Apple</h4>
+            <p class="text-xs text-white/60">iPhone, iPad, MacBook</p>
+          </div>
+          <div class="rounded-xl p-4 text-center card-hover border border-white/10 bg-white/5">
+            <i data-lucide="smartphone" class="size-10 mx-auto"></i>
+            <h4 class="font-bold mt-2">Samsung</h4>
+            <p class="text-xs text-white/60">Galaxy, Smart TVs</p>
+          </div>
+          <div class="rounded-xl p-4 text-center card-hover border border-white/10 bg-white/5">
+            <i data-lucide="camera" class="size-10 mx-auto"></i>
+            <h4 class="font-bold mt-2">Sony</h4>
+            <p class="text-xs text-white/60">PlayStation, Cameras</p>
+          </div>
+          <div class="rounded-xl p-4 text-center card-hover border border-white/10 bg-white/5">
+            <i data-lucide="tv" class="size-10 mx-auto"></i>
+            <h4 class="font-bold mt-2">LG</h4>
+            <p class="text-xs text-white/60">OLED TVs, Appliances</p>
+          </div>
+          <div class="rounded-xl p-4 text-center card-hover border border-white/10 bg-white/5">
+            <i data-lucide="hard-drive" class="size-10 mx-auto"></i>
+            <h4 class="font-bold mt-2">HP</h4>
+            <p class="text-xs text-white/60">Laptops, Printers</p>
+          </div>
+          <div class="rounded-xl p-4 text-center card-hover border border-white/10 bg-white/5">
+            <i data-lucide="laptop" class="size-10 mx-auto"></i>
+            <h4 class="font-bold mt-2">Dell</h4>
+            <p class="text-xs text-white/60">XPS, Gaming PCs</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICES -->
+      <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="rounded-2xl p-4 flex items-center gap-3 card-hover border border-white/10 bg-white/5"><i data-lucide="truck" class="size-8"></i><div><h4 class="font-bold">Free Delivery</h4><p class="text-xs">Orders above ₹499</p></div></div>
+        <div class="rounded-2xl p-4 flex items-center gap-3 card-hover border border-white/10 bg-white/5"><i data-lucide="shield-check" class="size-8"></i><div><h4 class="font-bold">Secure Pay</h4><p class="text-xs">100% Protected</p></div></div>
+        <div class="rounded-2xl p-4 flex items-center gap-3 card-hover border border-white/10 bg-white/5"><i data-lucide="headphones" class="size-8"></i><div><h4 class="font-bold">24/7 Support</h4><p class="text-xs">Expert Help</p></div></div>
+        <div class="rounded-2xl p-4 flex items-center gap-3 card-hover border border-white/10 bg-white/5"><i data-lucide="refresh-cw" class="size-8"></i><div><h4 class="font-bold">Easy Returns</h4><p class="text-xs">7 Days Return</p></div></div>
+      </section>
+
+      <!-- SOCIAL PROOF -->
+      <section class="card rounded-2xl p-6 text-center">
+        <h3 class="text-xl md:text-2xl font-bold">Join over 50,000 satisfied customers worldwide</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-6 text-white/80">
+          <div class="flex flex-col items-center"><i data-lucide="star" class="size-10 text-yellow-400"></i><p class="font-bold text-lg mt-2">4.8/5 Rating</p></div>
+          <div class="flex flex-col items-center"><i data-lucide="truck" class="size-10"></i><p class="font-bold text-lg mt-2">Fast Delivery</p></div>
+          <div class="flex flex-col items-center"><i data-lucide="shield-check" class="size-10"></i><p class="font-bold text-lg mt-2">Secure Payment</p></div>
+          <div class="flex flex-col items-center"><i data-lucide="message-circle" class="size-10"></i><p class="font-bold text-lg mt-2">24/7 Support</p></div>
+        </div>
+      </section>
+
+      <!-- NEWSLETTER -->
+      <section class="rounded-2xl p-6 md:p-10 text-center" style="background:var(--gradient-brand)">
+        <h3 class="text-2xl md:text-3xl font-bold">Stay Updated with Latest Deals</h3>
+        <p class="mt-2 max-w-xl mx-auto opacity-90">Subscribe to our newsletter and get exclusive offers, new product launches, and tech news delivered to your inbox.</p>
+        <form class="mt-6 max-w-md mx-auto flex flex-col sm:flex-row gap-3">
+          <input type="email" placeholder="Enter your email address" class="w-full px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/20" required />
+          <button type="submit" class="bg-black/80 text-white font-bold py-3 px-6 rounded-lg whitespace-nowrap hover:bg-black">Subscribe</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10 bg-[color:var(--surface)]">
+    <div class="container mx-auto px-4 py-8">
+      <div class="md:flex md:justify-between gap-10">
+        <div class="mb-8 md:mb-0 max-w-md">
+           <img id="site-logo" src="gdlogo.png" alt="Gada Electronics Logo" class="h-9 w-9 object-contain brand-logo" />
+          <h3 class="text-xl font-bold">Gada Electronics</h3>
+          <p class="text-sm text-white/70 mt-2">Aapka vishvasniya saathi latest electronics aur gadgets ke liye.</p>
+          <div class="flex gap-4 mt-6">
+            <a href="#" class="text-white/70 hover:text-white transition-colors"><i data-lucide="facebook" class="size-6"></i></a>
+            <a href="#" class="text-white/70 hover:text-white transition-colors"><i data-lucide="instagram" class="size-6"></i></a>
+            <a href="#" class="text-white/70 hover:text-white transition-colors"><i data-lucide="youtube" class="size-6"></i></a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-8">
+          <div class="space-y-3 text-sm">
+            <h4 class="font-bold">Customer Service</h4>
+            <ul class="space-y-2 text-white/70">
+              <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Shipping Info</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Returns & Exchanges</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Warranty</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Track Your Order</a></li>
+            </ul>
+          </div>
+          <div class="space-y-3 text-sm">
+            <h4 class="font-bold">About</h4>
+            <ul class="space-y-2 text-white/70">
+              <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Press</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Investor Relations</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Sustainability</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+            </ul>
+          </div>
+          <div class="space-y-3 text-sm">
+            <h4 class="font-bold">Payment & Security</h4>
+            <ul class="space-y-2 text-white/70">
+              <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="text-center text-xs text-white/60 mt-8 pt-6 border-t border-white/10">&copy; 2025 Gada Electronics. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Icons
+    lucide.createIcons();
+
+    // Theme toggle (dark default)
+    const toggle = document.getElementById('theme-toggle');
+    const root = document.documentElement;
+    const key = 'gada-theme';
+    const saved = localStorage.getItem(key);
+    if (saved === 'light') root.classList.add('light');
+    toggle?.addEventListener('click', () => {
+      root.classList.toggle('light');
+      localStorage.setItem(key, root.classList.contains('light') ? 'light' : 'dark');
+    });
+
+    // Mobile drawer
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mobileMenuContent = document.getElementById('mobile-menu-content');
+
+    const openMenu = () => {
+      mobileMenu.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+      setTimeout(() => { mobileMenuContent.classList.remove('translate-x-full'); }, 10);
+    };
+
+    const closeMenu = () => {
+      mobileMenuContent.classList.add('translate-x-full');
+      document.body.classList.remove('overflow-hidden');
+      setTimeout(() => { mobileMenu.classList.add('hidden'); }, 300);
+    };
+
+    if (menuBtn) {
+      menuBtn.addEventListener('click', openMenu);
+      document.getElementById('close-menu-btn')?.addEventListener('click', closeMenu);
+      mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) closeMenu(); });
+    }
+  </script>
+</body>
+</html>
